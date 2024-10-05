@@ -1,0 +1,17 @@
+body {
+  background-color:  #e5d6d6;
+  margin: 0 auto;
+  max-width: 1060px;
+  width: 100%;
+}
+
+.index-body .post-title {
+  display: none;
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
