@@ -1,17 +1,114 @@
+/* General Styles */
 body {
-  background-color:  #e5d6d6;
+  background-color: #f3f4f6;
   margin: 0 auto;
   max-width: 1060px;
   width: 100%;
+  font-family: 'Poppins', sans-serif; /* Stylish Google font */
+  line-height: 1.6;
+  color: #333;
+  padding: 20px;
+  transition: background-color 0.5s ease;
 }
 
-.index-body .post-title {
-  display: none;
+/* Smooth transition for background and text */
+body:hover {
+  background-color: #e8eaea;
 }
 
+/* Hero Image Styles */
 .hero-image {
   width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto;
+  margin: 20px 0;
+  border-radius: 15px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow for pop */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-image:hover {
+  transform: scale(1.02); /* Slight zoom effect on hover */
+  box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Blog Post Title */
+.post-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 10px;
+  color: #2c3e50;
+  font-weight: 700;
+  text-transform: capitalize;
+  transition: color 0.3s ease;
+}
+
+.post-title:hover {
+  color: #e74c3c; /* Flashy red on hover */
+}
+
+/* Blog Content */
+p {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* Link Styling */
+a {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #e74c3c; /* Accent color for interactions */
+}
+
+/* Navigation and Layout Adjustments */
+.index-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.index-body .post-title {
+  display: none; /* Hidden on the index page */
+}
+
+/* Buttons */
+button {
+  background-color: #3498db;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05); /* Slight pop on hover */
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 10px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+footer a {
+  color: #3498db;
+}
+
+footer a:hover {
+  color: #e74c3c;
 }

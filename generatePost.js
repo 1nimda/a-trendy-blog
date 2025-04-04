@@ -70,13 +70,16 @@ async function generateBlogPost(topic) {
 
 // List of topics to generate blog posts for
 const topics = [
-'2024 - Latest investment ideas',
-'Ethereum is being affected by the government adminstartion change in Japan',
-'Solana promise rising in the first Q 2025',
-'The future of Cryptocurrencies',
-'Trade with Binance AI',
-'Trade with Kucoin AI',
-'How to get my first trainee interview',
+  'Baby sleep tips',
+  'Tecnicas para dormir a tu bebe',
+// 'Writiting a blog with Eleventy'
+// '2024 - Latest investment ideas',
+// 'Ethereum is being affected by the government adminstartion change in Japan',
+// 'Solana promise rising in the first Q 2025',
+// 'The future of Cryptocurrencies',
+// 'Trade with Binance AI',
+// 'Trade with Kucoin AI',
+// 'How to get my first trainee interview',
 ];
 
 // Function to generate blog posts for all topics in the list
@@ -88,3 +91,4 @@ async function generateMultipleBlogPosts(topicList) {
 
 // Generate blog posts for all topics
 generateMultipleBlogPosts(topics);
+  
