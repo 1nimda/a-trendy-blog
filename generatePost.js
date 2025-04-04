@@ -37,10 +37,30 @@ async function generateBlogPost(topic) {
     // Fetch image related to the topic
     const imageUrl = await fetchImage(topic);
 
+
     // Generate blog content using OpenAI
+    const prompt = `Write a blog post about ${topic}. 
+    The target audience is brand new moms. 
+    Use a conversational and informative tone. 
+    The post should be around 500 words. 
+    Include sections.
+    Include keywords related to ${topic}.
+    Use order and unoredered lists, links to useful sites.
+    Return the response in spanish Argentina`;
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: `Write a blog post about ${topic}` }],
+      max_tokens: 1024,
+      temperature: 0.7, // Adjust for desired randomness (0.2-1.0 is common)
+      top_p: 0.9, // Adjust for desired randomness (0.8-1.0 is common)
+      messages: [
+        {
+          role: 'system',
+          content:'you are a helpful and knowledgable Argentinian blog writer with a wide look of the world, you are also an anthroposofic reference, you write in Spanish.'
+        },
+        { 
+        role: 'user', content: prompt
+       }
+      ],
     });
 
     // Check if the response contains choices
@@ -70,7 +90,6 @@ async function generateBlogPost(topic) {
 
 // List of topics to generate blog posts for
 const topics = [
-  'Baby sleep tips',
   'Tecnicas para dormir a tu bebe',
 // 'Writiting a blog with Eleventy'
 // '2024 - Latest investment ideas',
