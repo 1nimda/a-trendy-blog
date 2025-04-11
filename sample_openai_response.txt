@@ -1,0 +1,29 @@
+        '\n' +
+        '¡Queridas mamás primerizas! En esta etapa tan maravillosa y llena de descubrimientos junto a sus bebés, es normal sentirse abrumadas por la cantidad de información y consejos que reciben de todas partes. En este blog post, les brindaré algunos consejos útiles y cariñosos para acompañarlas en este hermoso viaje de la maternidad. ¡Vamos a empezar!\n' +
+        '\n' +
+        '### Consejos para bebés: Cuidados y amor desde el corazón\n' +
+        '\n' +
+        '#### 1. **Alimentación**\n' +
+        'Uno de los aspectos más importantes en la vida de un bebé es la alimentación. Recuerden que la leche materna es el mejor alimento para su bebé, ya que les proporciona todos los nutrientes necesarios para su crecimiento y desarrollo. Si tienen dudas o dificultades con la lactancia, no duden en buscar apoyo de un especialista en lactancia.\n' +   
+        '\n' +
+        '#### 2. **Descanso**\n' +
+        'El descanso es fundamental para el desarrollo de su bebé. Traten de establecer rutinas de sueño desde temprana edad, creando un ambiente tranquilo y propicio para el descanso. Recuerden que los bebés necesitan dormir varias horas al día para crecer sanos y fuertes.\n' +
+        '\n' +
+        '#### 3. **Higiene**\n' +
+        'Mantener la higiene de su bebé es esencial para prevenir enfermedades y mantenerlo saludable. Recuerden bañarlo con agua tibia, limpiar bien el cordón umbilical (si aún 
+no se ha caído) y cambiarle el pañal con frecuencia para evitar irritaciones en la piel.\n' +
+        '\n' +
+        '#### 4. **Estimulación**\n' +
+        'Desde el nacimiento, es importante estimular los sentidos de su bebé para favorecer su desarrollo cognitivo y emocional. Cantarle, hablarle, acariciarlo y jugar con él son actividades que fortalecerán el vínculo entre ustedes y estimularán su crecimiento.\n' +
+        '\n' +
+        '#### 5. **Control médico**\n' +
+        'No olviden realizar las visitas médicas periódicas con el pediatra para asegurarse de que su bebé crece de forma adecuada y no presenta ningún problema de salud. Ante cualquier duda o síntoma extraño, no duden en consultar con un profesional de la salud.\n' +
+        '\n' +
+        '#### Recursos útiles:\n' +
+        '- [La importancia de la lactancia materna](https://www.who.int/es/news-room/fact-sheets/detail/breastfeeding)\n' +
+        '- [Consejos para un sueño seguro del bebé](https://www.aap.org/espanol/)\n' +
+        '- [Estimulación temprana en bebés](https://www.fundacionnuestrosbrazos.org/)\n' +
+        '\n' +
+        'Queridas mamás, recuerden que cada bebé es único y especial, y que lo más importante es brindarles amor, cuidado y paciencia en cada etapa de su crecimiento. Disfruten de cada momento junto a sus pequeños y confíen en su instinto maternal. ¡Ustedes son increíbles! ¡Hasta el próximo post! 🌸\n' +
+        '\n' +
+        '¡Abrazos desde Argentina! 🇦🇷'  ,

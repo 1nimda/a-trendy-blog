@@ -1,113 +1,155 @@
-require('dotenv').config();  // Load environment variables
-const fs = require('fs'); // Import the file system module
+require('dotenv').config();
+const fs = require('fs');
+const axios = require('axios');
 const OpenAI = require('openai');
-const axios = require('axios') // For making HTTP requests to the Unsplash API
+const { log } = require('console');
 
-// Initialize the OpenAI API with your configuration
+const TEST_MODE = true; // Set to true to use the mock response, false to call OpenAI
+const SAMPLE_OPENAI_RESPONSE_FILE = 'sample_openai_response.txt';
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Function to get a related image from Unsplash
-async function fetchImage(topic) {
+// Blog post generator
+async function generateBlogPost(topic) {
   try {
-    const response = await axios.get('https://api.unsplash.com/search/photos', {
-      params: { query: topic, orientation: 'landscape', per_page: 1 },  // Search for 1 image related to the topic
-      headers: { Authorization: `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}` } // Unsplash API key
+    const prompt = `Write a blog post about ${topic}. 
+    The target audience is brand new moms. 
+    Use a conversational and informative tone.
+    Write a visually appealing sensitive post.
+    The post should be around 500 words. 
+    Include sections.
+    Include keywords related to ${topic}.
+    Use ordered and unordered lists, and links to useful sites.
+    Return the response in Spanish with Argentina's tone and words.`;
+
+    const response = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      temperature: 0.7,
+      max_tokens: 1024,
+      top_p: 0.9,
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You are a helpful and knowledgeable Argentinian blog writer with a wide worldview. You are also an anthroposophic reference and always write in Spanish.',
+        },
+        { role: 'user', content: prompt },
+      ],
     });
 
-    if (response.data.results && response.data.results.length > 0) {
-      const imageUrl = response.data.results[0].urls.raw;  // Use 'raw' to get the original high-res image URL
-      const heroImageUrl = `${imageUrl}&w=1920&h=1080&fit=crop`;  // Customize width/height for hero image
-
-      return heroImageUrl  // Return the small image URL
-    } else {
-      console.log(`No images found for topic: ${topic}`);
-      return null; // No image found
+    if (!response.choices || response.choices.length === 0) {
+      console.error('No content generated from OpenAI.');
+      return;
     }
+
+    const postContent = response.choices[0].message.content;
+    // const keywords = extractKeywords(postContent);
+    // const imageQuery = keywords.slice(0, 3).join(' '); // Use top 3 keywords
+    const imageQuery = topic;
+
+    const imageUrl = await fetchImage(imageQuery);
+    const fileName = `./src/content/${topic.replace(/\s+/g, '-').toLowerCase()}.md`;
+
+    const frontMatter = `---
+title: "${topic}"
+date: "${new Date().toISOString()}"
+tags: blog
+heroImage: "${imageUrl || ''}"
+---`;
+
+    const markdown = `${frontMatter}
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../styles/styles.css">
+</head>
+<body>
+<h1 class="post-title">${topic}</h1>
+<div class="custom-wrapper">${postContent}</div>
+</body>
+</html>   
+`;
+
+
+    fs.writeFileSync(fileName, markdown);
+    console.log(`✅ Blog post generated: ${fileName}`);
   } catch (error) {
-    console.error('Error fetching image:', error.message);
+    console.error(
+      '❌ Error generating blog post:',
+      error.response ? error.response.data : error.message
+    );
+  }
+}
+
+// Keyword extractor
+// function extractKeywords(text) {
+//   const stopWords = [
+//     'de', 'la', 'el', 'en', 'a', 'y', 'que', 'los', 'las',
+//     'un', 'una', 'para', 'con', 'por', 'como', 'es', 'son',
+//     'se', 'al', 'del', 'su', 'le', 'me', 'nos', 'te', 'lo'
+//   ];
+
+//   const words = text
+//     .toLowerCase()
+//     .replace(/[^a-záéíóúüñ\s]/gi, '')
+//     .split(/\s+/)
+//     .filter(word => word.length > 3 && !stopWords.includes(word));
+
+//   const frequency = {};
+//   for (const word of words) {
+//     frequency[word] = (frequency[word] || 0) + 1;
+//   }
+
+//   return Object.entries(frequency)
+//     .sort(([, a], [, b]) => b - a)
+//     .map(([word]) => word)
+//     .slice(0, 5);
+// }
+
+// Image fetch
+async function fetchImage(topic) {
+  try {
+    const refinedQuery = `${topic} bebés maternidad cuidados infantiles`;
+    const encodedQuery = encodeURIComponent(refinedQuery);
+
+    const response = await axios.get('https://api.pexels.com/v1/search', {
+      params: {
+        query: encodedQuery,
+        per_page: 5,
+        orientation: 'landscape',
+        order_by: 'relevant'
+      },
+      headers: {
+        Authorization: process.env.PEXELS_API_KEY, // Replace with your Pexels API key
+      },
+    });
+
+    const results = response.data.photos;
+    return results.length > 0 ? results[0].src.landscape : null;
+  } catch (error) {
+    console.error('❌ Error fetching image:', error.message);
     return null;
   }
 }
 
-// Function to generate a blog post
-async function generateBlogPost(topic) {
-  try {
-    // Fetch image related to the topic
-    const imageUrl = await fetchImage(topic);
-
-
-    // Generate blog content using OpenAI
-    const prompt = `Write a blog post about ${topic}. 
-    The target audience is brand new moms. 
-    Use a conversational and informative tone. 
-    The post should be around 500 words. 
-    Include sections.
-    Include keywords related to ${topic}.
-    Use order and unoredered lists, links to useful sites.
-    Return the response in spanish Argentina`;
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      max_tokens: 1024,
-      temperature: 0.7, // Adjust for desired randomness (0.2-1.0 is common)
-      top_p: 0.9, // Adjust for desired randomness (0.8-1.0 is common)
-      messages: [
-        {
-          role: 'system',
-          content:'you are a helpful and knowledgable Argentinian blog writer with a wide look of the world, you are also an anthroposofic reference, you write in Spanish.'
-        },
-        { 
-        role: 'user', content: prompt
-       }
-      ],
-    });
-
-    // Check if the response contains choices
-    if (response.choices && response.choices.length > 0) {
-      const postContent = response.choices[0].message.content; // Correctly access content
-      console.log(postContent);
-    
-      // Create a markdown file
-      const postTitle = topic.replace(/\s+/g, '-').toLowerCase(); // Clean the title for filenames
-      const fileName = `./src/content/${postTitle}.md`;
-
-       // Include the image if one was found
-      const imageMarkdown = imageUrl ? `<img src="${imageUrl}" alt="${topic}" class="hero-image" style="  width: 100%; height: auto; display: block; margin: 0 auto;"/>\n\n` : '';
-      const markdown = `---\ntitle: "${topic}"\ndate: "${new Date().toISOString()}"\ntags: blog\n---\n\n${imageMarkdown}<h1 class="post-title">${topic}</h1>\n\n${postContent}`;
-
-      fs.writeFileSync(fileName, markdown);
-      console.log(`Blog post generated: ${fileName}`);
-    } else {
-      console.error('No content generated from OpenAI.');
-    }
-    
-  } catch (error) {
-    // Enhanced error handling
-    console.error('Error generating blog post:', error.response ? error.response.data : error.message);
-  }
-}
-
-// List of topics to generate blog posts for
+// List of topics
 const topics = [
-  'Tecnicas para dormir a tu bebe',
-// 'Writiting a blog with Eleventy'
-// '2024 - Latest investment ideas',
-// 'Ethereum is being affected by the government adminstartion change in Japan',
-// 'Solana promise rising in the first Q 2025',
-// 'The future of Cryptocurrencies',
-// 'Trade with Binance AI',
-// 'Trade with Kucoin AI',
-// 'How to get my first trainee interview',
+  'Rudolph Steiner',
+  'Montesori',
+  // Agregá más temas si querés generar más blogs
 ];
 
-// Function to generate blog posts for all topics in the list
+// Batch generator
 async function generateMultipleBlogPosts(topicList) {
   for (const topic of topicList) {
     await generateBlogPost(topic);
   }
 }
 
-// Generate blog posts for all topics
+// Start generation
 generateMultipleBlogPosts(topics);
-  
