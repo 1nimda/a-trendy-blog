@@ -4,14 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-     <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="/styles/styles.css">
 </head>
-<body class="index-body">
+<body class="{% if page.url == '/' %}index-body{% else %}post-body{% endif %}">
     <header>
-        <h1>{{ title }}</h1>
+        <h1><a href="/">{{ site.title }}</a></h1>
     </header>
-    <main>
-        {{ content | safe }}
+    <main class="{% if page.url == '/' %}index-content-wrapper{% else %}post-content-wrapper{% endif %}">
+        {% if page.url == '/' %}
+            <h2>{{ title }}</h2> {{ content | safe }}
+        {% else %}
+            {% if heroImage %}
+            <img src="{{ heroImage }}" alt="{{ title }}" class="hero-image">
+            {% endif %}
+            <h1 class="post-title">{{ title }}</h1> {{ content | safe }}
+        {% endif %}
     </main>
     <footer>
         <p>&copy; 2025 My Blog</p>
